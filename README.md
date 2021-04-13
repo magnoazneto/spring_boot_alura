@@ -15,3 +15,8 @@ public static List<TopicoDto> converter(List<Topico> topicos){
 O método acima, presente na classe TopicoDto, utiliza uma sintaxe presente do Java 8 em diante.
 Útil para transformar uma Lista de Entidades numa lista de Dtos de forma rápida.
 
+## OneToMany
+
+Na classe Topico, acima do atributo respostas, é possível ver um exemplo de implementação desse modo de cardinalidade 
+onde é necessário definir de onde aquele relacionamento está sendo mapeado, para que o Spring não tente mapeá-lo duas vezes.
+o atributo mappedBy = [nome do atributo na outra Entidade] é usado para isso.

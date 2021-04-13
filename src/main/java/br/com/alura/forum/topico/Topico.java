@@ -1,18 +1,35 @@
-package br.com.alura.forum.modelo;
+package br.com.alura.forum.topico;
 
+import br.com.alura.forum.modelo.Curso;
+import br.com.alura.forum.modelo.Resposta;
+import br.com.alura.forum.modelo.StatusTopico;
+import br.com.alura.forum.usuario.Usuario;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Topico {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String titulo;
 	private String mensagem;
 	private LocalDateTime dataCriacao = LocalDateTime.now();
+
+	@Enumerated(EnumType.STRING)
 	private StatusTopico status = StatusTopico.NAO_RESPONDIDO;
+
+	@ManyToOne
 	private Usuario autor;
+
+	@ManyToOne
 	private Curso curso;
+
+	@OneToMany(mappedBy = "topico")
 	private List<Resposta> respostas = new ArrayList<>();
 
 	public Topico(String titulo, String mensagem, Curso curso) {
