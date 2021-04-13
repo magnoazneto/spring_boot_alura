@@ -1,4 +1,4 @@
-package br.com.alura.forum.usuario;
+package br.com.alura.forum.curso;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,17 +10,17 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 @RestController
-@RequestMapping("/usuario")
-public class UsuarioController {
+@RequestMapping("/curso")
+public class CursoController {
 
     @Autowired
     EntityManager manager;
 
     @PostMapping("/novo")
     @Transactional
-    public UsuarioDto criaUsuario(@RequestBody UsuarioRequest usuario){
-        Usuario novoUsuario = usuario.toModel();
-        manager.persist(novoUsuario);
-        return new UsuarioDto(novoUsuario);
+    public CursoDto criaCurso(@RequestBody CursoRequest request){
+        Curso novoCurso = request.toModel();
+        manager.persist(novoCurso);
+        return new CursoDto(novoCurso);
     }
 }

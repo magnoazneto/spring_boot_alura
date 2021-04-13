@@ -1,4 +1,4 @@
-package br.com.alura.forum.modelo;
+package br.com.alura.forum.curso;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +13,11 @@ public class Curso {
 	private Long id;
 	private String nome;
 	private String categoria;
+
+	@Deprecated
+	public Curso(){
+
+	}
 
 	public Curso(String nome, String categoria) {
 		this.nome = nome;

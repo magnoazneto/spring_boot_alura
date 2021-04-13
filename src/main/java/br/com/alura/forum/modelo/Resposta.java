@@ -22,6 +22,11 @@ public class Resposta {
 	private Usuario autor;
 	private Boolean solucao = false;
 
+	@Deprecated
+	public Resposta(){
+
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -1,6 +1,6 @@
 package br.com.alura.forum.topico;
 
-import br.com.alura.forum.modelo.Curso;
+import br.com.alura.forum.curso.Curso;
 import br.com.alura.forum.modelo.Resposta;
 import br.com.alura.forum.modelo.StatusTopico;
 import br.com.alura.forum.usuario.Usuario;
@@ -31,6 +31,11 @@ public class Topico {
 
 	@OneToMany(mappedBy = "topico")
 	private List<Resposta> respostas = new ArrayList<>();
+
+	@Deprecated
+	public Topico(){
+
+	}
 
 	public Topico(String titulo, String mensagem, Curso curso) {
 		this.titulo = titulo;
