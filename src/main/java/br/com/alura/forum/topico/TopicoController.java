@@ -1,4 +1,4 @@
-package br.com.alura.forum.controller;
+package br.com.alura.forum.topico;
 
 import br.com.alura.forum.modelo.Curso;
 import br.com.alura.forum.modelo.Topico;
@@ -11,14 +11,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/topicos")
-public class TopicosController {
+public class TopicoController {
 
     @GetMapping("/all")
-    public List<Topico> listaTopicos(){
+    public List<TopicoDto> listaTopicos(){
         Topico topico = new Topico("Duvida",
-                "Duvida com Spring",
-                new Curso("Spring", "Programacao"));
+                "Duvida sobre Spring",
+                new Curso("Spring Boot", "Programacao"));
 
-        return Arrays.asList(topico, topico, topico);
+        return TopicoDto.converter(Arrays.asList(topico, topico, topico));
     }
 }
