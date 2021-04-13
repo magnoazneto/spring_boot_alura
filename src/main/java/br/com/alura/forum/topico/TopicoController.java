@@ -15,7 +15,7 @@ public class TopicoController {
     @Autowired
     private TopicoRepository topicoRepo;
 
-    @GetMapping("/")
+    @GetMapping
     public List<TopicoDto> listaTopico(String nomeCurso){
         List<Topico> topicos = null;
         if(nomeCurso == null){

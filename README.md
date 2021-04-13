@@ -20,3 +20,14 @@ O método acima, presente na classe TopicoDto, utiliza uma sintaxe presente do J
 Na classe Topico, acima do atributo respostas, é possível ver um exemplo de implementação desse modo de cardinalidade 
 onde é necessário definir de onde aquele relacionamento está sendo mapeado, para que o Spring não tente mapeá-lo duas vezes.
 o atributo mappedBy = [nome do atributo na outra Entidade] é usado para isso.
+
+## Criação de Query com JPA
+
+É possível ver na classe TopicoRepository um exemplo de método que faz o Spring entender e construir
+uma query, mesmo que ela navegue por relacionamentos! Foi usado aqui um _ para deixar explicito a navegação
+por Entidades, mas ele não é obrigatório.
+
+## Get "smart"
+
+No TopicoController também existe um método Get que suporta tanto ser chamado sem uma extensão ao endpoint do Controller
+quanto com uma extensão de queryParam padrão HTTP. Útil para buscas mais genéricas por um termo.
