@@ -15,11 +15,14 @@ public class TopicoController {
     @Autowired
     private TopicoRepository topicoRepo;
 
-    private CursoRepository cursoRepo;
-
-    @GetMapping("/all")
-    public List<TopicoDto> listaTopicos(){
-        List<Topico> topicos = topicoRepo.findAll();
+    @GetMapping("/")
+    public List<TopicoDto> listaTopico(String nomeCurso){
+        List<Topico> topicos = null;
+        if(nomeCurso == null){
+            topicos = topicoRepo.findAll();
+        } else{
+            topicos = topicoRepo.findByCurso_Nome(nomeCurso);
+        }
         return TopicoDto.converter(topicos);
     }
 }
