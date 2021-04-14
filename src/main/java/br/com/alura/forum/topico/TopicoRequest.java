@@ -1,28 +1,24 @@
 package br.com.alura.forum.topico;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import br.com.alura.forum.curso.Curso;
+import br.com.alura.forum.curso.CursoRepository;
 
 public class TopicoRequest {
 
     private String titulo;
     private String mensagem;
-    private Long autorId;
-    private Long cursoId;
-    private List<Integer> respostasIds;
+    private String nomeCurso;
 
-    public TopicoRequest(String titulo,
-                         String mensagem,
-                         Long autorId,
-                         Long cursoId,
-                         List<Integer> respostasIds) {
+    public TopicoRequest(String titulo, String mensagem, String nomeCurso) {
         this.titulo = titulo;
         this.mensagem = mensagem;
-        this.autorId = autorId;
-        this.cursoId = cursoId;
-        this.respostasIds = respostasIds;
+        this.nomeCurso = nomeCurso;
     }
 
+    public Topico toModel(CursoRepository cursoRepo){
+        Curso curso = cursoRepo.findByNome(this.nomeCurso);
+        return new Topico(this.titulo, this.mensagem, curso);
+    }
     public String getTitulo() {
         return titulo;
     }
@@ -31,15 +27,7 @@ public class TopicoRequest {
         return mensagem;
     }
 
-    public Long getAutorId() {
-        return autorId;
-    }
-
-    public Long getCursoId() {
-        return cursoId;
-    }
-
-    public List<Integer> getRespostasIds() {
-        return respostasIds;
+    public String getNomeCurso() {
+        return nomeCurso;
     }
 }
