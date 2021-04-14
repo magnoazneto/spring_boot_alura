@@ -138,3 +138,31 @@ Atente-se para qualquer tag de scope indevida caso encontre algum problema com M
    WebSecurityConfigurerAdapter
    
 Com isso feito, chamadas aos endpoins da aplicação já devem estar bloqueadas.
+
+### O arquivo de configurações
+
+No arquivo SecurityConfigurations, deve-se sobrescrever 3 chamadas do método configure que são usados para as configurações do
+Spring Security. No arquivo desse projeto há um comentário acima de cada uma das chamadas desse método indicando que funções eles
+exercem.
+
+- Pontos de atenção:
+>   .antMatchers() é usado para definir um método HTTP, uma rota, e nele pode ser chamado o método permitAll() para tornar esse endpoint "publico".
+
+>   .anyRequest().authenticated() também é uma combinação útil para fazer todas as outras endpoints não listados nos métodos .antMatchers serem liberadas somente
+> mediante autenticação.
+
+
+### A idéia de Usuário
+
+Para usar autenticação, a classe de Usuário precisa implementar a interface UserDetails do Spring Security.
+Essa classe tem alguns métodos que precisam ser sobrescritos, mas apenas alguns são realmente usados nesse projeto. São eles:
+1. getPassword() -> sempre deve devolver o atributo que representa o password naquela entidade.
+2. getUserName() -> no caso dessa aplicação, ela vai recuperar o email do Usuário, mas esse método sempre deve devolver o atributo que representa o "login" do usuário.
+3. getAuthorities() -> deve retornar uma List com os Perfis de Usuário. Veja abaixo nesse Readme.
+
+Todos os outros métodos de sobrescrita obrigatória são setados para retornar True por padrão.
+
+- Classe Perfil: Essa classe precisa ser anotada com @Entity porque também terá que ser armazenada no Banco de Dados. Ela deve também
+implementar a interface GrantedAuthority e sobrescrever seu método getAuthority() que deve retornar o nome daquele perfil.
+  - Ponto de atenção: na classe Usuário, o atributo de perfis é anotado com @ManyToMany. Por padrão o Spring faz isso ser Lazy Load, é interessante
+    lembrar de mudar isso para (fetch = FetchType.EAGER) caso seja necessário.
