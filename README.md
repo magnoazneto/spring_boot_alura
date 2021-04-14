@@ -106,3 +106,8 @@ A maneira simples de implementar Cache na aplicação é através da anotação
 aquele recurso em cache (Vide TopicoController).
 - Ponto de atenção: O spring é esperto o suficiente para guardar os parâmetros e os valores desses parâmetros e devolver uma busca
 que já esteja armazenada em cache com tais valores. Ou seja: por trás dos panos existem múltiplos registros em cache para um mesmo endpoint
+  
+- É possível limpar o cache em algumas operações com:
+> @CacheEvict(value = "listaDeTopicos", allEntries = true)
+
+Onde o value representa o id do cache e o allEntries configura a limpeza de todos os endpoints armazenados naquele cacheId
