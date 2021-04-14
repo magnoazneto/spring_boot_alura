@@ -7,11 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/topico")
@@ -35,9 +36,12 @@ public class TopicoController {
     }
 
     @GetMapping("/{id}")
-    public TopicoDetalheDto detalhaTopico(@PathVariable Long id){
-        Topico topico = topicoRepo.getOne(id);
-        return new TopicoDetalheDto(topico);
+    public ResponseEntity<TopicoDetalheDto> detalhaTopico(@PathVariable Long id){
+        Optional<Topico> topico = topicoRepo.findById(id);
+        return topico.map(value -> {
+            return ResponseEntity.ok(new TopicoDetalheDto(value));
+        }).orElseGet(() -> ResponseEntity.notFound().build());
+
     }
 
     @PostMapping
@@ -54,15 +58,22 @@ public class TopicoController {
     @Transactional
     public ResponseEntity<TopicoDto> atualizaTopico(@PathVariable Long id,
                                                     @RequestBody @Valid TopicoPutFormRequest request){
-        Topico topicoAtualizado = request.atualizar(id, topicoRepo);
 
-        return ResponseEntity.ok(new TopicoDto(topicoAtualizado));
+        Optional<Topico> possivelTopico = topicoRepo.findById(id);
+        return possivelTopico.map(value -> {
+            Topico topicoAtualizado = request.atualizar(id, topicoRepo);
+            return ResponseEntity.ok(new TopicoDto(value));
+        }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<?> removeTopico(@PathVariable Long id){
-        topicoRepo.deleteById(id);
-        return ResponseEntity.ok().build();
+
+        Optional<Topico> possivelTopico = topicoRepo.findById(id);
+        return possivelTopico.map(value -> {
+            topicoRepo.deleteById(id);
+            return ResponseEntity.ok().build();
+        }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
