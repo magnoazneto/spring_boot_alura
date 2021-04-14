@@ -96,4 +96,13 @@ Dessa parte em diante são tratadas funcionalidades mais intermediárias como pa
 
 No TopicoController há um exemplo de como develver resultados paginados. Há uma forma mais "manual" de fazer isso, e está inclusive no
 histórico de Commits. Mas há usa apenas o objeto Pageable direto nos parâmetros do método POST é adequada e flexível o suficiente.
-É possível também usar uma anotação chamada de @PageableDefault para definir DefaultValues.
+É possível também usar uma anotação chamada de @PageableDefault para definir DefaultValues. Para que a paginação funcione corretamente, a anotação
+@EnableSpringDataWebSupport é necessária na classe main.
+
+## Cache
+
+A maneira simples de implementar Cache na aplicação é através da anotação
+@EnableCaching na classe main e da anotação @Cacheable com uma chave que servirá para identificar
+aquele recurso em cache (Vide TopicoController).
+- Ponto de atenção: O spring é esperto o suficiente para guardar os parâmetros e os valores desses parâmetros e devolver uma busca
+que já esteja armazenada em cache com tais valores. Ou seja: por trás dos panos existem múltiplos registros em cache para um mesmo endpoint
