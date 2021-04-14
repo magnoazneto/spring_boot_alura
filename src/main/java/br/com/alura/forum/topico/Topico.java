@@ -1,8 +1,7 @@
 package br.com.alura.forum.topico;
 
 import br.com.alura.forum.curso.Curso;
-import br.com.alura.forum.modelo.Resposta;
-import br.com.alura.forum.modelo.StatusTopico;
+import br.com.alura.forum.resposta.Resposta;
 import br.com.alura.forum.usuario.Usuario;
 
 import javax.persistence.*;

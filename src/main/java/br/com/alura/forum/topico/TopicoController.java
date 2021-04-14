@@ -33,6 +33,12 @@ public class TopicoController {
         return TopicoDto.converter(topicos);
     }
 
+    @GetMapping("/{id}")
+    public TopicoDetalheDto detalhaTopico(@PathVariable Long id){
+        Topico topico = topicoRepo.getOne(id);
+        return new TopicoDetalheDto(topico);
+    }
+
     @PostMapping
     public ResponseEntity<TopicoDto> criaTopico(@RequestBody @Valid TopicoRequest request, UriComponentsBuilder uriBuilder){
         Topico topico = request.toModel(cursoRepo);
@@ -41,4 +47,9 @@ public class TopicoController {
         URI uri = uriBuilder.path("/topico/{id}").buildAndExpand(topico.getId()).toUri();
         return ResponseEntity.created(uri).body(new TopicoDto(topico));
     }
+
+//    @Put
+//    public ResponseEntity<TopicoDto> atualizaTopico(){
+//
+//    }
 }

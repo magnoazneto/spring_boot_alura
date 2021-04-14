@@ -1,4 +1,4 @@
-package br.com.alura.forum.modelo;
+package br.com.alura.forum.resposta;
 
 import br.com.alura.forum.topico.Topico;
 import br.com.alura.forum.usuario.Usuario;
