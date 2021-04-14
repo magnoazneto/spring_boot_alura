@@ -68,4 +68,23 @@ Existem diferentes modos de tratar diferentes tipos de erros. Nesse projeto, exi
 PUT deveria ser oficialmente usado quando se deseja atualizar sobrescrevendo um recurso INTEIRO.
 PATCH deveria ser oficialmente usado quando se deseja atualizar apenas uma PARTE daquele recurso.
 
+## Error Handling Return Syntax
+
+Nesse projeto também foi usada uma estrutura de retorno condicionada a existência ou não de um ID
+na hora de executar métodos que buscam por tal ID no banco de dados. Esse tipo de estrutura foca em apenas 1 return no método
+do Controller, o que em minha visão é de melhor prática do que 2 ou mais returns no mesmo método.
+
+~~~{Java}
+public ResponseEntity<TopicoDetalheDto> detalhaTopico(@PathVariable Long id){
+    Optional<Topico> topico = topicoRepo.findById(id);
+    return topico.map(value -> {
+        return ResponseEntity.ok(new TopicoDetalheDto(value));
+    }).orElseGet(() -> ResponseEntity.notFound().build());
+
+}
+~~~
+
+A estrutura é basicamente retornar algo caso o Optional<?> exista, e caso contrário, retornar o status notFound.
+É possível ainda executar uma função ao entrar no map e por exemplo, atualizar ou deletar algo no Banco de Dados, 
+como pode ser visto nos métodos PUT e DELETE desse mesmo controller.
 
