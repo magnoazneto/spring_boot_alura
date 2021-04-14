@@ -116,3 +116,20 @@ Onde o value representa o id do cache e o allEntries configura a limpeza de todo
 
 Muitas operações de limpeza/invalidação de cache podem até piorar a performance. O ideal é utilizar cache em tabelas ESTÁVEIS! 
 Onde raramente os dados daquela tabela serão atualizados.
+
+## Segurança
+
+Para ativar o módulo de segurança do Spring alguns passos podem ser seguidos:
+
+1. Verificar a dependëncia do Spring Security no pom.xml:
+>		<dependency>
+>			<groupId>org.springframework.boot</groupId>
+>			<artifactId>spring-boot-starter-security</artifactId>
+>       </dependency>
+
+Atente-se para qualquer tag de scope indevida caso encontre algum problema com Maven.
+
+2. Crie sua classe de configurações de segurança, anote-a com @EnableWebSecurity e @Configuration e faça-a herdar da classe
+   WebSecurityConfigurerAdapter
+   
+Com isso feito, chamadas aos endpoins da aplicação já devem estar bloqueadas.
