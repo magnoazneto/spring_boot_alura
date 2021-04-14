@@ -111,3 +111,8 @@ que já esteja armazenada em cache com tais valores. Ou seja: por trás dos pano
 > @CacheEvict(value = "listaDeTopicos", allEntries = true)
 
 Onde o value representa o id do cache e o allEntries configura a limpeza de todos os endpoints armazenados naquele cacheId
+
+### Quando usar Cache? Onde faz sentido?
+
+Muitas operações de limpeza/invalidação de cache podem até piorar a performance. O ideal é utilizar cache em tabelas ESTÁVEIS! 
+Onde raramente os dados daquela tabela serão atualizados.
