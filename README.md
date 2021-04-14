@@ -58,3 +58,14 @@ em caso de necessidade de verificar a Entidade que acabou de ser criada nesse m�
 - Depois, deve-se chamar o método buildAndExpand(), que recebe o valor que deverá ser substituído na String passada para o método path()
 - Por fim, é só chamar o método toUri() e passar esse objeto URI dentro do método created().
 
+## Tratamento de Erros
+
+Existem diferentes modos de tratar diferentes tipos de erros. Nesse projeto, existem tratamentos para:
+- MethodArgumentNotValidException
+
+## PUT e PATCH
+
+PUT deveria ser oficialmente usado quando se deseja atualizar sobrescrevendo um recurso INTEIRO.
+PATCH deveria ser oficialmente usado quando se deseja atualizar apenas uma PARTE daquele recurso.
+
+
