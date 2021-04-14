@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.Arrays;
@@ -40,6 +41,7 @@ public class TopicoController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<TopicoDto> criaTopico(@RequestBody @Valid TopicoRequest request, UriComponentsBuilder uriBuilder){
         Topico topico = request.toModel(cursoRepo);
         topicoRepo.save(topico);
@@ -48,8 +50,19 @@ public class TopicoController {
         return ResponseEntity.created(uri).body(new TopicoDto(topico));
     }
 
-//    @Put
-//    public ResponseEntity<TopicoDto> atualizaTopico(){
-//
-//    }
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<TopicoDto> atualizaTopico(@PathVariable Long id,
+                                                    @RequestBody @Valid TopicoPutFormRequest request){
+        Topico topicoAtualizado = request.atualizar(id, topicoRepo);
+
+        return ResponseEntity.ok(new TopicoDto(topicoAtualizado));
+    }
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity<?> removeTopico(@PathVariable Long id){
+        topicoRepo.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }
