@@ -1,5 +1,10 @@
+# Sobre esse Projeto
+Esse projeto foi feito para fixar conteúdo e podem ser encontrados alguns exemplos de uso do Spring Boot. Os
+comentários nesse README representam os pontos que julguei merecerem mais atenção frente ao
+meu nível de conhecimento técnico da época. Se encontrar algum erro ou ponto de melhoria, sinta-se livre para
+me dar um toque :) minhas informações de contato estão no meu perfil do github.
+
 # Spring Boot Alura: REST API
-Esse projeto feito para recuperação de conteúdo e podem ser encontrados alguns exemplos de uso do Spring Boot.
 
 ## Classes Dto
 
