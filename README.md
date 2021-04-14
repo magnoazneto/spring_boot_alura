@@ -5,7 +5,7 @@ Esse projeto feito para recuperação de conteúdo e podem ser encontrados algun
 
 Algumas classes são criadas exclusivamente para transferência de dados, evitando assim que a própria entidade modelo seja 
 enviada na resposta de uma requisição e que apenas os dados realmente necessários na resposta sejam devolvidos.
-Ponde de atenção:
+Ponto de atenção:
 ~~~{Java}
 public static List<TopicoDto> converter(List<Topico> topicos){
         return topicos.stream().map(TopicoDto::new).collect(Collectors.toList());
@@ -14,7 +14,8 @@ public static List<TopicoDto> converter(List<Topico> topicos){
 
 O método acima, presente na classe TopicoDto, utiliza uma sintaxe presente do Java 8 em diante.
 Útil para transformar uma Lista de Entidades numa lista de Dtos de forma rápida.
-
+Dto = Data Transfer Object. Nesse projeto é um padrão utilizado para representar o que saí da API para
+o client. O que vem do client para a API poderia ser representado como Form, mas aqui é usado um padrão de -request.
 ## OneToMany
 
 Na classe Topico, acima do atributo respostas, é possível ver um exemplo de implementação desse modo de cardinalidade 
