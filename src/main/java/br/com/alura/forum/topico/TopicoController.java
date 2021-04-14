@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
@@ -33,7 +34,7 @@ public class TopicoController {
     }
 
     @PostMapping
-    public ResponseEntity<TopicoDto> criaTopico(@RequestBody TopicoRequest request, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<TopicoDto> criaTopico(@RequestBody @Valid TopicoRequest request, UriComponentsBuilder uriBuilder){
         Topico topico = request.toModel(cursoRepo);
         topicoRepo.save(topico);
 
