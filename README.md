@@ -1,4 +1,4 @@
-# Spring boot Alura project
+# Spring Boot Alura: REST API
 Esse projeto feito para recuperação de conteúdo e podem ser encontrados alguns exemplos de uso do Spring Boot.
 
 ## Classes Dto
@@ -88,3 +88,12 @@ A estrutura é basicamente retornar algo caso o Optional<?> exista, e caso contr
 É possível ainda executar uma função ao entrar no map e por exemplo, atualizar ou deletar algo no Banco de Dados, 
 como pode ser visto nos métodos PUT e DELETE desse mesmo controller.
 
+# Spring Boot Alura: Segurança, Cache e Monitoramento
+
+Dessa parte em diante são tratadas funcionalidades mais intermediárias como paginacao, cache, segurança e monitoramento
+
+## Paginação
+
+No TopicoController há um exemplo de como develver resultados paginados. Há uma forma mais "manual" de fazer isso, e está inclusive no
+histórico de Commits. Mas há usa apenas o objeto Pageable direto nos parâmetros do método POST é adequada e flexível o suficiente.
+É possível também usar uma anotação chamada de @PageableDefault para definir DefaultValues.

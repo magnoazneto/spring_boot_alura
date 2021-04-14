@@ -30,10 +30,7 @@ public class TopicoController {
 
     @GetMapping
     public Page<TopicoDto> listaTopico(@RequestParam(required = false) String nomeCurso,
-                                       @RequestParam(defaultValue = "0") int pagina,
-                                       @RequestParam(defaultValue = "10") int qtd,
-                                       @RequestParam(defaultValue = "id") String ordenacao){
-        Pageable paginacao = PageRequest.of(pagina, qtd, Sort.Direction.ASC, ordenacao);
+                                       Pageable paginacao){
 
         if(nomeCurso == null){
             Page<Topico> topicos = topicoRepo.findAll(paginacao);
