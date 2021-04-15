@@ -1,5 +1,7 @@
 package br.com.alura.forum.config.security.autenticacao;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
 public class LoginRequest {
 
     private String email;
@@ -19,5 +21,9 @@ public class LoginRequest {
 
     public String getSenha() {
         return senha;
+    }
+
+    public UsernamePasswordAuthenticationToken converterEmToken() {
+        return new UsernamePasswordAuthenticationToken(this.email, this.senha);
     }
 }
