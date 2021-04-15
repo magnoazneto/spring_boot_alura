@@ -23,7 +23,7 @@ public class LoginRequest {
         return senha;
     }
 
-    public UsernamePasswordAuthenticationToken converterEmToken() {
+    public UsernamePasswordAuthenticationToken converter() {
         return new UsernamePasswordAuthenticationToken(this.email, this.senha);
     }
 }
