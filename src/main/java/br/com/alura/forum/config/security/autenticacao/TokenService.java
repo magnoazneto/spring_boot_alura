@@ -2,13 +2,18 @@ package br.com.alura.forum.config.security.autenticacao;
 
 
 import br.com.alura.forum.usuario.Usuario;
+import br.com.alura.forum.usuario.UsuarioRepository;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 public class TokenService {
@@ -18,6 +23,9 @@ public class TokenService {
 
     @Value("${forum.jwt.secret}")
     private String secret;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     public String gerarToken(Authentication authentication) {
 
@@ -41,5 +49,12 @@ public class TokenService {
         } catch(Exception e){
             return false;
         }
+    }
+
+    public Usuario getUsuario(String token) {
+        Claims claims = Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token).getBody();
+        Optional<Usuario> usuario = usuarioRepository.findById(Long.parseLong(claims.getSubject()));
+        Assert.notNull(usuario, "Problema ao encontrar usuario.");
+        return usuario.get();
     }
 }

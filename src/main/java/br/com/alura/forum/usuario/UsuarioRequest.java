@@ -1,5 +1,7 @@
 package br.com.alura.forum.usuario;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 public class UsuarioRequest {
 
     private String nome;
@@ -13,7 +15,7 @@ public class UsuarioRequest {
     }
 
     public Usuario toModel(){
-        return new Usuario(this.nome, this.email, this.senha);
+        return new Usuario(this.nome, this.email, new BCryptPasswordEncoder().encode(this.senha));
     }
 
     public String getNome() {
