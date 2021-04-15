@@ -166,3 +166,4 @@ Todos os outros métodos de sobrescrita obrigatória são setados para retornar 
 implementar a interface GrantedAuthority e sobrescrever seu método getAuthority() que deve retornar o nome daquele perfil.
   - Ponto de atenção: na classe Usuário, o atributo de perfis é anotado com @ManyToMany. Por padrão o Spring faz isso ser Lazy Load, é interessante
     lembrar de mudar isso para (fetch = FetchType.EAGER) caso seja necessário.
+
