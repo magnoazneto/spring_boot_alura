@@ -67,6 +67,7 @@ em caso de necessidade de verificar a Entidade que acabou de ser criada nesse m�
 
 Existem diferentes modos de tratar diferentes tipos de erros. Nesse projeto, existem tratamentos para:
 - MethodArgumentNotValidException
+- AuthenticationException
 
 ## PUT e PATCH
 
@@ -165,10 +166,72 @@ Todos os outros métodos de sobrescrita obrigatória são setados para retornar 
 - Classe Perfil: Essa classe precisa ser anotada com @Entity porque também terá que ser armazenada no Banco de Dados. Ela deve também
 implementar a interface GrantedAuthority e sobrescrever seu método getAuthority() que deve retornar o nome daquele perfil.
   - Ponto de atenção: na classe Usuário, o atributo de perfis é anotado com @ManyToMany. Por padrão o Spring faz isso ser Lazy Load, é interessante
-    lembrar de mudar isso para (fetch = FetchType.EAGER) caso seja necessário.
+    lembrar de mudar isso para alguma outra coisa, como um (fetch = FetchType.EAGER) caso seja necessário, por exemplo.
 
 ### Autenticação
 
 A autenticação nessa aplicação é feita seguindo o padrão Stateless das APIs REST.
 Autenticações devem ser feitas pela aplicação clienete enviando email e senha por um método POST na rota
-"/auth".
+"/auth". Isso gera uma série de eventos do Spring Security que foram configurados nesse projeto:
+
+### Geração de Token
+
+Quando um usuário envia o login e senha (no caso desse projeto login é o email) pela rota de post /auth,
+ele cai no AuthenticationController no método autenticar. Esse método recebe apenas 1 parâmetro:
+
+~~~{Java}
+@PostMapping
+public ResponseEntity<?> autenticar(@RequestBody @Valid LoginRequest request){
+UsernamePasswordAuthenticationToken dadosLogin = request.converterEmToken();
+
+        Authentication authentication = authManager.authenticate(dadosLogin);
+        String token = tokenService.gerarToken(authentication);
+        System.out.println(token);
+
+        return ResponseEntity.ok().build();
+    }
+~~~
+
+Esse parâmetro também precisa, como todas as nossas classes que chegam pelo Client,
+deve ser uma espécie de Dto para Request. É necessário instanciar um objeto do tipo
+UsernamePasswordAuthenticationToken com os dados de login e senha. Nesse projeto existe 
+um método converter(). Tudo que esse método faz é chamar o construtor de UsernamePasswordAuthenticationToken,
+que recebe como argumentos login e senha (Object principal, Object credentials).
+
+Com isso, pode-se passar o objeto dadosLogin para o método .authenticate de um AuthenticationManager.
+O próximo passo é gerar o token, e isso é feito por um service nesse projeto.
+
+### TokenService
+
+Essa é uma classe que deve ser anotada com @Service e será responsável por gerar o token propriamente dito.
+Antes de tudo, ela usará dois atributos armazenados no arquivo application.properties. São eles:
+
+~~~{Java}
+@Value("${forum.jwt.expiration}")
+private String expiration;
+
+@Value("${forum.jwt.secret}")
+private String secret;
+~~~
+
+A anotação @Value passando o nome do atributo do .properties faz uma injeção de dependência.
+
+Na classe TokenService, a primeira coisa que acontece é a recuperação do usuário que se logou:
+
+>  Usuario logado = (Usuario) authentication.getPrincipal();
+
+Depois, basta retornar o token buildado pelo Jwts. No caso desse projeto, usando alguns métodos:
+
+> .setIssuer() -> Quem é a aplicação que está gerando o token? (String)
+
+> .setSubject() -> Quem é o usuário dono do Token? (String)
+
+É possível recuperar o Usuário logado pelo método .getPrincipal() da classe Authentication.
+
+> .setIssuedAt() -> Data que o token foi gerado
+
+> .setExpiration() -> Data que o token vai expirar. É aqui que usamos aquela injeção de expiration do .properties. (Date, em mili)
+
+> .signWith(alg, secretKey) -> é aqui que acontece a criptografia. Nessa aplicação se passa o algoritmo SignatureAlgorithm.HS256. Também se usa o secret do .properties.
+
+por fim é só chamar o método .compact(), e o token deve ser gerado. E no caso desse projeto, pronto para uso no AuthController :)
