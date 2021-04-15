@@ -265,3 +265,7 @@ mas de forma resumida, o caminho inteiro acontece dentro das classes do package 
 3. O usuário é então confirmado/autenticado agora via token, se esse for válido, e seu acesso é liberado de acordo com os perfis de autoridade.
 
 
+## Swagger :D
+
+Essa aplicação faz uso do swagger para documentação. É bem simples fazer essa configuração. Bastando uma classe que também está no package de configs
+e a liberação dos recursos que o swagger utiliza na classe de configurações de segurança.
