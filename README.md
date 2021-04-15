@@ -167,3 +167,8 @@ implementar a interface GrantedAuthority e sobrescrever seu método getAuthority
   - Ponto de atenção: na classe Usuário, o atributo de perfis é anotado com @ManyToMany. Por padrão o Spring faz isso ser Lazy Load, é interessante
     lembrar de mudar isso para (fetch = FetchType.EAGER) caso seja necessário.
 
+### Autenticação
+
+A autenticação nessa aplicação é feita seguindo o padrão Stateless das APIs REST.
+Autenticações devem ser feitas pela aplicação clienete enviando email e senha por um método POST na rota
+"/auth".

@@ -1,4 +1,4 @@
-package br.com.alura.forum.config.security;
+package br.com.alura.forum.config.security.autenticacao;
 
 import br.com.alura.forum.usuario.Usuario;
 import br.com.alura.forum.usuario.UsuarioRepository;
