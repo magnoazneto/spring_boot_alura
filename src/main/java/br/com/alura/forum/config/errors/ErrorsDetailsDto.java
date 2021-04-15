@@ -2,16 +2,16 @@ package br.com.alura.forum.config.errors;
 
 public class ErrorsDetailsDto {
 
-    private final String field;
+    private final String reason;
     private final String error;
 
-    public ErrorsDetailsDto(String field, String error) {
-        this.field = field;
+    public ErrorsDetailsDto(String reason, String error) {
+        this.reason = reason;
         this.error = error;
     }
 
-    public String getField() {
-        return field;
+    public String getReason() {
+        return reason;
     }
 
     public String getError() {
