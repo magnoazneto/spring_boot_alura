@@ -4,7 +4,7 @@ comentários nesse README representam os pontos que julguei merecerem mais aten�
 meu nível de conhecimento técnico da época. Se encontrar algum erro ou ponto de melhoria, sinta-se livre para
 me dar um toque :) minhas informações de contato estão no meu perfil do github.
 
-# Spring Boot Alura: REST API
+# Spring Boot: REST API
 
 ## Classes Dto
 
@@ -94,7 +94,7 @@ A estrutura é basicamente retornar algo caso o Optional<?> exista, e caso contr
 É possível ainda executar uma função ao entrar no map e por exemplo, atualizar ou deletar algo no Banco de Dados, 
 como pode ser visto nos métodos PUT e DELETE desse mesmo controller.
 
-# Spring Boot Alura: Segurança, Cache e Monitoramento
+# Spring Boot: Segurança, Cache e Monitoramento
 
 Dessa parte em diante são tratadas funcionalidades mais intermediárias como paginacao, cache, segurança e monitoramento
 
@@ -181,24 +181,23 @@ ele cai no AuthenticationController no método autenticar. Esse método recebe a
 
 ~~~{Java}
 @PostMapping
-public ResponseEntity<?> autenticar(@RequestBody @Valid LoginRequest request){
-UsernamePasswordAuthenticationToken dadosLogin = request.converterEmToken();
+public ResponseEntity<TokenDto> autenticar(@RequestBody @Valid LoginRequest request){
+    UsernamePasswordAuthenticationToken dadosLogin = request.converter();
 
-        Authentication authentication = authManager.authenticate(dadosLogin);
-        String token = tokenService.gerarToken(authentication);
-        System.out.println(token);
+    Authentication authentication = authManager.authenticate(dadosLogin);
+    String token = tokenService.gerarToken(authentication);
 
-        return ResponseEntity.ok().build();
-    }
+    return ResponseEntity.ok(new TokenDto(token, "Bearer"));
+}
 ~~~
 
-Esse parâmetro também precisa, como todas as nossas classes que chegam pelo Client,
-deve ser uma espécie de Dto para Request. É necessário instanciar um objeto do tipo
+Esse parâmetro também precisa, como todas as nossas classes que chegam pelo Client, ser uma espécie de Dto para Request. É necessário instanciar um objeto do tipo
 UsernamePasswordAuthenticationToken com os dados de login e senha. Nesse projeto existe 
 um método converter(). Tudo que esse método faz é chamar o construtor de UsernamePasswordAuthenticationToken,
 que recebe como argumentos login e senha (Object principal, Object credentials).
 
-Com isso, pode-se passar o objeto dadosLogin para o método .authenticate de um AuthenticationManager.
+Com isso, pode-se passar o objeto dadosLogin para o método .authenticate de um AuthenticationManager. Isso fará o Spring Security verificar se o usuário e senha recebidos pela request realmente
+são válidos. Se não forem, uma AuthenticationException será disparada e tratada pelo ExceptionHandler global.
 O próximo passo é gerar o token, e isso é feito por um service nesse projeto.
 
 ### TokenService
@@ -214,9 +213,13 @@ private String expiration;
 private String secret;
 ~~~
 
-A anotação @Value passando o nome do atributo do .properties faz uma injeção de dependência.
+A anotação @Value passando o nome do atributo do .properties injeta esses valores para a classe.
 
-Na classe TokenService, a primeira coisa que acontece é a recuperação do usuário que se logou:
+Na classe TokenService existem 3 métodos que são usados por diferentes outras classes do projeto. São elas:
+
+- gerarToken(Authentication authentication)
+
+a primeira coisa que acontece aqui é a recuperação do usuário que se logou:
 
 >  Usuario logado = (Usuario) authentication.getPrincipal();
 
@@ -224,7 +227,7 @@ Depois, basta retornar o token buildado pelo Jwts. No caso desse projeto, usando
 
 > .setIssuer() -> Quem é a aplicação que está gerando o token? (String)
 
-> .setSubject() -> Quem é o usuário dono do Token? (String)
+> .setSubject() -> Qual o id do usuário dono do Token? (String)
 
 É possível recuperar o Usuário logado pelo método .getPrincipal() da classe Authentication.
 
@@ -235,3 +238,30 @@ Depois, basta retornar o token buildado pelo Jwts. No caso desse projeto, usando
 > .signWith(alg, secretKey) -> é aqui que acontece a criptografia. Nessa aplicação se passa o algoritmo SignatureAlgorithm.HS256. Também se usa o secret do .properties.
 
 por fim é só chamar o método .compact(), e o token deve ser gerado. E no caso desse projeto, pronto para uso no AuthController :)
+
+
+- isTokenValid(String token)
+
+Esse método apenas faz a verificação, chamando o próprio Jwts, da autenticidade do token recebido pela aplicação (para ver se bate com o token gerado em momento anterior
+pelo método .gerarToken())
+
+Isso é feito com a chamada de um parser passando o secret e o token.
+> Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token);
+
+Importante lembrar que essa chamada, em caso de falha na validação, irá disparar exceções de diferentes tipo. Então aqui seria interessante
+realmente um Try catch, dependendo do caso.
+
+- getUsuario(String token)
+
+Esse método usa uma chamada bem semelhante a anterior para recuperar o usuário dono do token.
+
+### O controle Stateless de requests por token
+
+Uma vez que a aplicação cliente já consegue acessar uma rota de autenticação, ele consegue receber um token gerado pelo tokenService
+do projeto e realizar novas requests, dessa vez enviando o token como método de autenticação Bearer. Existem vários códigos necessários para que isso aconteça, 
+mas de forma resumida, o caminho inteiro acontece dentro das classes do package chamado de "autenticacao" desse projeto:
+1. Um filtro de requests intercepta a request antes de chegar nos controllers
+2. O token que é enviado no Header da requisição é recuperado
+3. O usuário é então confirmado/autenticado agora via token, se esse for válido, e seu acesso é liberado de acordo com os perfis de autoridade.
+
+

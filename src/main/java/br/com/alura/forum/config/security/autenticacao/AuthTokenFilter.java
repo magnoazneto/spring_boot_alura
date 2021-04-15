@@ -33,6 +33,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
+    // esse metodo realiza a autenticacao dessa vez por token, nao mais por usuario e senha
     private void autenticarCliente(String token) {
         Usuario usuario = tokenService.getUsuario(token);
 
