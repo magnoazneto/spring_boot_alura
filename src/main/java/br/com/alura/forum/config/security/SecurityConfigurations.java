@@ -1,6 +1,8 @@
 package br.com.alura.forum.config.security;
 
-import br.com.alura.forum.config.security.autenticacao.AutenticacaoService;
+import br.com.alura.forum.config.security.autenticacao.AuthService;
+import br.com.alura.forum.config.security.autenticacao.AuthTokenFilter;
+import br.com.alura.forum.config.security.autenticacao.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,13 +15,17 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
 public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private AutenticacaoService autenticacaoService;
+    private AuthService authService;
+
+    @Autowired
+    private TokenService tokenService;
 
     @Override
     @Bean
@@ -30,7 +36,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
     // Autenticacao
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(autenticacaoService).passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(authService).passwordEncoder(new BCryptPasswordEncoder());
     }
 
     // Configuracoes de Autorizacao
@@ -42,7 +48,8 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/auth").permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().addFilterBefore(new AuthTokenFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
     }
 
     // Configuracoes de recursos estaticos (js, css, imagens, etc.)
