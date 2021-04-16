@@ -265,6 +265,12 @@ mas de forma resumida, o caminho inteiro acontece dentro das classes do package 
 3. O usuário é então confirmado/autenticado agora via token, se esse for válido, e seu acesso é liberado de acordo com os perfis de autoridade.
 
 
+### O controle de request por Role
+
+No banco de dados usado nessa aplicação existem dois roles: MODERADOR e ALUNO. No arquivo de configuracoes há uma linha que configura o método
+DELETE de tópicos para assegurar que aquele endpoint só poderá ser acessado por usuários com o ROLE de MODERADOR. O Spring faz isso através da verificação do ROLE
+desse usuário que está cadastrado no banco de dados através de tabelas feitas para essa função.
+
 ## Swagger :D
 
 Essa aplicação faz uso do swagger para documentação. É bem simples fazer essa configuração. Bastando uma classe que também está no package de configs
@@ -279,3 +285,11 @@ as classes de segurança e autenticação são configuradas com a anotação @Pr
 há uma classe de configurações de segurança exclusiva para ambiente "dev".
 
 ## Junit Tests
+
+Existem algumas classes de teste neste projeto usando Junit. Elas são apenas para demonstrar algumas abordagens de testes envolvendo
+inclusive perfis de teste, configuracoes no .properties para testes, e algumas anotacoes importantes nas classes de testes. Ainda serão aprofundadas.
+
+## Deploy
+
+O pom.xml contém uma tag para delimitar o nome do pacote que será buidado pelo Maven na hora do deploy, e o arquivo de propriedades da apicação possui algumas
+variáveis de ambiente. Essas variáveis podem e devem ser mapeadas no servidor de deploy, como por exemplo, o heroku.
