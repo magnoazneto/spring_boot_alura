@@ -269,3 +269,13 @@ mas de forma resumida, o caminho inteiro acontece dentro das classes do package 
 
 Essa aplicação faz uso do swagger para documentação. É bem simples fazer essa configuração. Bastando uma classe que também está no package de configs
 e a liberação dos recursos que o swagger utiliza na classe de configurações de segurança.
+
+# Spring Boot: Testes, profiles e deploy
+
+## Profiles
+
+No arquivo de propriedades há na primeira linha o perfil em uso da aplicação. Nesse projeto,
+as classes de segurança e autenticação são configuradas com a anotação @Profile para serem consideradas apenas em "prod", e 
+há uma classe de configurações de segurança exclusiva para ambiente "dev".
+
+## Junit Tests
