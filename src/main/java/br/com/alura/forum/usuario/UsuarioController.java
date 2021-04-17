@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/usuario")
@@ -18,7 +19,7 @@ public class UsuarioController {
 
     @PostMapping("/novo")
     @Transactional
-    public UsuarioDto criaUsuario(@RequestBody UsuarioRequest usuario){
+    public UsuarioDto criaUsuario(@RequestBody @Valid UsuarioRequest usuario){
         Usuario novoUsuario = usuario.toModel();
         manager.persist(novoUsuario);
         return new UsuarioDto(novoUsuario);

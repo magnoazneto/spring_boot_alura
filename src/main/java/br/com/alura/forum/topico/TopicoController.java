@@ -1,23 +1,21 @@
 package br.com.alura.forum.topico;
 
-import br.com.alura.forum.curso.Curso;
 import br.com.alura.forum.curso.CursoRepository;
+import br.com.alura.forum.utils.MailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -30,6 +28,11 @@ public class TopicoController {
     @Autowired
     private CursoRepository cursoRepo;
 
+    @Autowired
+    private MailSender mailSender;
+
+
+
     @GetMapping
     @Cacheable(value = "listaDeTopicos")
     public Page<TopicoDto> listaTopico(@RequestParam(required = false) String nomeCurso,
@@ -41,12 +44,15 @@ public class TopicoController {
         }
 
         Page<Topico> topicos = topicoRepo.findByCurso_Nome(nomeCurso, paginacao);
+
+        mailSender.enviar();
         return TopicoDto.converter(topicos);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<TopicoDetalheDto> detalhaTopico(@PathVariable Long id){
         Optional<Topico> topico = topicoRepo.findById(id);
+
         return topico.map(value -> {
             return ResponseEntity.ok(new TopicoDetalheDto(value));
         }).orElseGet(() -> ResponseEntity.notFound().build());

@@ -291,5 +291,5 @@ inclusive perfis de teste, configuracoes no .properties para testes, e algumas a
 
 ## Deploy
 
-O pom.xml contém uma tag para delimitar o nome do pacote que será buidado pelo Maven na hora do deploy, e o arquivo de propriedades da apicação possui algumas
+O pom.xml contém uma tag para delimitar o nome do pacote que será buildado pelo Maven na hora do deploy, e o arquivo de propriedades da aplicação possui algumas
 variáveis de ambiente. Essas variáveis podem e devem ser mapeadas no servidor de deploy, como por exemplo, o heroku.
